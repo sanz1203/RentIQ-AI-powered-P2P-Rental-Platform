@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RentIQ — Smart P2P Rental Platform</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo" id="nav-logo">
+                <i class="fa-solid fa-arrows-spin logo-icon"></i>
+                <span>Rent<span class="logo-highlight">IQ</span></span>
+            </a>
+            
+            <nav class="nav-menu" id="nav-menu">
+                <a href="#" class="nav-link active" data-screen="browse"><i class="fa-solid fa-house"></i> Browse</a>
+                
+                <span id="nav-auth-links" class="hidden">
+                    <a href="#" class="nav-link" data-screen="dashboard"><i class="fa-solid fa-table-columns"></i> Dashboard</a>
+                    <a href="#" class="nav-link" data-screen="profile"><i class="fa-solid fa-user"></i> Profile</a>
+                    <button class="btn btn-outline btn-sm nav-logout-btn" id="btn-logout"><i class="fa-solid fa-sign-out"></i> Logout</button>
+                </span>
+
+                <span id="nav-guest-links">
+                    <button class="btn btn-primary btn-sm" id="nav-login-btn" data-screen="auth"><i class="fa-solid fa-sign-in"></i> Login / Register</button>
+                </span>
+            </nav>
+            
+            <button class="nav-toggle" id="nav-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <div class="container">
+            
+            <div id="alert-banner" class="alert hidden">
+                <span id="alert-message"></span>
+                <button class="alert-close" onclick="document.getElementById('alert-banner').classList.add('hidden')">&times;</button>
+            </div>
+
+            <section id="screen-browse" class="app-screen">
+                <div class="hero-section">
+                    <h1>Find what you need, rent from neighbors.</h1>
+                    <p>AI-assisted peer-to-peer rental marketplace with smart price advice & safety checks.</p>
+                    
+                    <div class="search-bar">
+                        <div class="search-input-group">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="search-keyword" placeholder="What are you looking for? (e.g. camping tent, lawn mower)">
+                        </div>
+                        <div class="search-input-group border-left">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <input type="text" id="search-location" placeholder="City or location">
+                        </div>
+                        <div class="search-input-group border-left">
+                            <i class="fa-solid fa-tags"></i>
+                            <select id="search-category">
+                                <option value="">All Categories</option>
+                                <option value="Camping & Outdoors">Camping & Outdoors</option>
+                                <option value="Tools & Hardware">Tools & Hardware</option>
+                                <option value="Electronics & AV">Electronics & AV</option>
+                                <option value="Sports & Fitness">Sports & Fitness</option>
+                                <option value="Party & Events">Party & Events</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="btn-search">Search</button>
+                    </div>
+                </div>
+
+                <div class="listings-section">
+                    <h2 class="section-title">Available Listings</h2>
+                    <div class="listings-grid" id="listings-grid">
+                        
+                        <div class="text-center w-full py-12 text-muted">
+                            <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                            <p class="mt-2">Loading neighborhood listings...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="screen-auth" class="app-screen hidden">
+                <div class="auth-container">
+                    
+                    <div class="auth-card" id="login-card">
+                        <h3>Welcome Back</h3>
+                        <p class="auth-subtitle">Log in to manage bookings and chats</p>
+                        <form id="form-login">
+                            <div class="form-group">
+                                <label for="login-email">Email Address</label>
+                                <input type="email" id="login-email" required placeholder="name@domain.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="login-password">Password</label>
+                                <input type="password" id="login-password" required placeholder="••••••••">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Log In</button>
+                        </form>
+                        <p class="auth-toggle-text">New to RentIQ? <a href="#" id="link-show-register">Create an account</a></p>
+                    </div>
+
+                    <div class="auth-card hidden" id="register-card">
+                        <h3>Create Account</h3>
+                        <p class="auth-subtitle">Join the local P2P sharing community</p>
+                        <form id="form-register">
+                            <div class="form-group">
+                                <label for="reg-name">Full Name</label>
+                                <input type="text" id="reg-name" required placeholder="Alex Mercer">
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-email">Email Address</label>
+                                <input type="email" id="reg-email" required placeholder="alex@domain.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-password">Password</label>
+                                <input type="password" id="reg-password" required placeholder="Choose a secure password">
+                            </div>
+                            <div class="form-group">
+                                <label for="reg-role">Default User Mode</label>
+                                <select id="reg-role">
+                                    <option value="renter">Renter (I want to rent items)</option>
+                                    <option value="owner">Owner (I want to list items for rent)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Register</button>
+                        </form>
+                        <p class="auth-toggle-text">Already have an account? <a href="#" id="link-show-login">Log in instead</a></p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="screen-listing-detail" class="app-screen hidden">
+                <button class="btn btn-link mb-6" id="btn-back-to-browse"><i class="fa-solid fa-arrow-left"></i> Back to Browse</button>
+                
+                <div class="detail-layout">
+                    
+                    <div class="detail-main">
+                        <div class="detail-gallery" id="detail-images">
+                            
+                        </div>
+                        <div class="detail-info">
+                            <div class="category-badge" id="detail-category">Category</div>
+                            <h1 id="detail-title">Listing Title</h1>
+                            <div class="detail-location"><i class="fa-solid fa-location-dot"></i> <span id="detail-location-text">City, State</span></div>
+                            
+                            <hr class="my-6">
+                            
+                            <h3>Description</h3>
+                            <p id="detail-description" class="text-secondary leading-relaxed">Listing Description goes here.</p>
+                            
+                            <hr class="my-6">
+
+                            <div class="owner-box">
+                                <div class="owner-avatar">
+                                    <i class="fa-solid fa-user"></i>
+                                </div>
+                                <div class="owner-details">
+                                    <h4 id="detail-owner-name">Owner Name</h4>
+                                    <div class="owner-meta">
+                                        <span class="verified-badge hidden" id="detail-owner-verified">
+                                            <i class="fa-solid fa-circle-check"></i> Verified
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-sidebar">
+                        <div class="booking-card">
+                            <div class="booking-price-header">
+                                <span class="booking-price-amount" id="detail-price-text">₹0</span>
+                                <span class="booking-price-unit">/ day</span>
+                            </div>
+                            
+                            <form id="form-create-booking">
+                                <div class="form-group">
+                                    <label for="book-start-date">Start Date</label>
+                                    <input type="date" id="book-start-date" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="book-end-date">End Date</label>
+                                    <input type="date" id="book-end-date" required>
+                                </div>
+
+                                <div class="price-breakdown hidden" id="booking-price-breakdown">
+                                    <div class="price-row">
+                                        <span>Rental (<span id="breakdown-days">0</span> days)</span>
+                                        <span id="breakdown-rental-cost">₹0.00</span>
+                                    </div>
+                                    <div class="price-row highlight">
+                                        <span>Refundable Deposit (30%)</span>
+                                        <span id="breakdown-deposit-cost">₹0.00</span>
+                                    </div>
+                                    <hr>
+                                    <div class="price-row total">
+                                        <span>Total Due</span>
+                                        <span id="breakdown-total-cost">₹0.00</span>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block" id="btn-request-booking">Request Booking</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="screen-dashboard" class="app-screen hidden">
+                <div class="dashboard-header">
+                    <h2>Dashboard</h2>
+                    <div class="tab-controls">
+                        <button class="tab-btn active" id="tab-rentals" onclick="switchDashboardTab('rentals')"><i class="fa-solid fa-suitcase"></i> My Rentals</button>
+                        <button class="tab-btn" id="tab-listings" onclick="switchDashboardTab('listings')"><i class="fa-solid fa-list-ul"></i> My Listings</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-content">
+                    
+                    <div id="tab-content-rentals" class="tab-pane">
+                        <h3>Bookings You Placed</h3>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Dates</th>
+                                        <th>Total Paid</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-rentals-body">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="tab-content-listings" class="tab-pane hidden">
+                        <div class="listings-dashboard-controls">
+                            <h3>Your Listed Items</h3>
+                            <button class="btn btn-primary" id="btn-open-create-listing-modal"><i class="fa-solid fa-plus"></i> List New Item</button>
+                        </div>
+
+                        <div class="listings-grid mt-4 mb-8" id="owner-listings-grid">
+                            
+                        </div>
+
+                        <hr class="my-8">
+
+                        <h3>Rental Requests Received</h3>
+                        <div class="table-container mt-4">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Renter</th>
+                                        <th>Item</th>
+                                        <th>Dates</th>
+                                        <th>Security Deposit</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-owner-requests-body">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="screen-profile" class="app-screen hidden">
+                <div class="profile-layout">
+                    
+                    <div class="profile-card">
+                        <div class="profile-header-main">
+                            <div class="profile-avatar-large">
+                                <i class="fa-solid fa-user-tie"></i>
+                            </div>
+                            <h3 id="profile-name">User Full Name</h3>
+                            <p class="text-secondary" id="profile-email">user@email.com</p>
+                            <span class="user-role-badge" id="profile-role">Renter</span>
+                        </div>
+
+                        <hr class="my-6">
+
+                        <hr class="my-6">
+
+                        <div class="verification-box-profile">
+                            <h4>ID Verification Status</h4>
+                            <div id="profile-verification-status" class="mb-4">
+                                <span class="badge badge-warning"><i class="fa-solid fa-clock"></i> Unverified</span>
+                            </div>
+                            
+                            <form id="form-id-upload" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="verification_doc">Upload ID (Driver's License / Passport / Student ID)</label>
+                                    <input type="file" id="verification_doc" name="verification_doc" required accept="image/*,.pdf">
+                                    <p class="file-help">Upload photo to instantly verify your profile.</p>
+                                </div>
+                                <button type="submit" class="btn btn-outline btn-block btn-sm">Upload & Verify</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="reviews-section-profile">
+                        <h3>Reviews About You</h3>
+                        <div class="reviews-list" id="profile-reviews-list">
+                            
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="screen-chat" class="app-screen hidden">
+                <button class="btn btn-link mb-6" onclick="showScreen('dashboard')"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</button>
+                
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="chat-header-info">
+                            <h3 id="chat-header-title">Chat Room</h3>
+                            <p id="chat-header-sub">Regarding: item details</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-messages" id="chat-message-log">
+                        
+                    </div>
+                    
+                    <form id="form-chat-send" class="chat-input-bar">
+                        <input type="text" id="chat-input-text" placeholder="Type a message..." required autocomplete="off">
+                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <div class="modal-backdrop hidden" id="modal-create-listing">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h4>List a New Item</h4>
+                <button class="modal-close" id="btn-close-create-listing-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-create-listing" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="list-title">Item Title</label>
+                        <input type="text" id="list-title" name="title" required placeholder="e.g. 4-person Waterproof Dome Tent">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group col">
+                            <label for="list-category">Category</label>
+                            <select id="list-category" name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="Camping & Outdoors">Camping & Outdoors</option>
+                                <option value="Tools & Hardware">Tools & Hardware</option>
+                                <option value="Electronics & AV">Electronics & AV</option>
+                                <option value="Sports & Fitness">Sports & Fitness</option>
+                                <option value="Party & Events">Party & Events</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group col">
+                            <label for="list-location">Location</label>
+                            <input type="text" id="list-location" name="location" required placeholder="e.g. Seattle, WA">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="list-description">Description</label>
+                        <textarea id="list-description" name="description" rows="3" required placeholder="Describe the item condition, rules, and components..."></textarea>
+                    </div>
+
+                    <div class="form-row align-items-end">
+                        <div class="form-group col">
+                            <label for="list-price">Daily Price (₹)</label>
+                            <input type="number" id="list-price" name="price_per_day" required min="1" step="0.5" placeholder="e.g. 1000">
+                        </div>
+                        
+                        <div class="form-group col">
+                            <button type="button" class="btn btn-outline btn-block mb-1" id="btn-ai-price">
+                                <i class="fa-solid fa-wand-magic-sparkles text-spark"></i> Smart Pricing (AI)
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="ai-pricing-result hidden" id="ai-pricing-suggestion-box">
+                        <div class="ai-pricing-header">
+                            <i class="fa-solid fa-sparkles"></i> Gemini AI Pricing recommendation
+                        </div>
+                        <div class="ai-pricing-body">
+                            <div class="ai-price-vals">
+                                Recommended: <strong id="ai-rec-val">₹0</strong> 
+                                (Range: <span id="ai-range-val">₹0 - ₹0</span>)
+                            </div>
+                            <p id="ai-price-reasoning" class="ai-price-reasoning-text"></p>
+                            <button type="button" class="btn btn-sm btn-primary mt-2" id="btn-apply-ai-price">Apply AI Price</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="listing_images">Item Images</label>
+                        <input type="file" id="listing_images" name="listing_images" multiple accept="image/*">
+                        <p class="file-help">Upload up to 5 clear photos of the item.</p>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block mt-6">Publish Listing</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="modal-damage-inspection">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h4 id="damage-modal-title">Inspection Photos</h4>
+                <button class="modal-close" onclick="document.getElementById('modal-damage-inspection').classList.add('hidden')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-damage-upload" enctype="multipart/form-data">
+                    <input type="hidden" id="damage-booking-id" name="booking_id">
+                    <input type="hidden" id="damage-photo-type" name="photo_type">
+
+                    <p id="damage-modal-instructions" class="mb-4 text-secondary"></p>
+
+                    <div class="form-group">
+                        <label for="damage_images">Choose Files</label>
+                        <input type="file" id="damage_images" name="damage_images" multiple accept="image/*" required>
+                    </div>
+
+                    <div id="damage-ai-loading" class="hidden text-center py-6">
+                        <i class="fa-solid fa-spinner fa-spin fa-2x text-primary"></i>
+                        <p class="mt-2 text-secondary font-medium">Gemini AI is analyzing photos and comparing with check-in records...</p>
+                    </div>
+
+                    <div id="damage-ai-result" class="hidden ai-damage-box mb-4">
+                        <h5 class="text-warning font-semibold mb-2"><i class="fa-solid fa-triangle-exclamation"></i> Gemini Damage Scan Analysis</h5>
+                        <p id="damage-ai-details" class="text-secondary mb-3"></p>
+                        <div class="badge-row mb-2">
+                            <span class="badge" id="damage-ai-severity">Severity: Low</span>
+                            <span class="badge badge-warning" id="damage-ai-deduction">Deduction: ₹0.00</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block" id="btn-submit-damage">Upload Photos</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="modal-leave-review">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h4>Leave a Review</h4>
+                <button class="modal-close" onclick="document.getElementById('modal-leave-review').classList.add('hidden')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-leave-review">
+                    <input type="hidden" id="review-booking-id">
+                    
+                    <div class="form-group">
+                        <label>Rating</label>
+                        <div class="star-rating" id="review-star-picker">
+                            <i class="fa-regular fa-star star-btn" data-value="1"></i>
+                            <i class="fa-regular fa-star star-btn" data-value="2"></i>
+                            <i class="fa-regular fa-star star-btn" data-value="3"></i>
+                            <i class="fa-regular fa-star star-btn" data-value="4"></i>
+                            <i class="fa-regular fa-star star-btn" data-value="5"></i>
+                        </div>
+                        <input type="hidden" id="review-rating-val" required min="1" max="5">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="review-comment">Review Comment</label>
+                        <textarea id="review-comment" rows="4" required placeholder="Describe your experience with the item and owner..."></textarea>
+                        <p class="file-help">Gemini AI analyzes reviews to maintain fair trust scores on all community profiles.</p>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block mt-4">Submit Review</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <script src="/js/api.js"></script>
+    
+    <script src="/js/app.js"></script>
+</body>
+</html>

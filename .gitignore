@@ -1,0 +1,8 @@
+node_modules/
+backend/uploads/listings/*
+backend/uploads/verifications/*
+backend/uploads/damage/*
+.env
+package-lock.json
+*.log
+.DS_Store
