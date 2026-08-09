@@ -1,13 +1,3 @@
----
-title: RentIQ
-emoji: 🔄
-colorFrom: blue
-colorTo: green
-sdk: docker
-app_port: 5000
-pinned: false
----
-
 # RentIQ — AI-Powered P2P Rental Platform
 
 Live URL: [https://sanz1203-rentiq.hf.space/](https://sanz1203-rentiq.hf.space/)
